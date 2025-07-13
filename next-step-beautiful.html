@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>הצעד הבא</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Assistant', sans-serif;
+      background: linear-gradient(135deg, #e0f7ff, #ffffff);
+      color: #333;
+    }
+    header {
+      background: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1470&q=80') no-repeat center center/cover;
+      color: white;
+      text-align: center;
+      padding: 5em 1em;
+    }
+    header h1 {
+      font-size: 3em;
+      margin: 0;
+    }
+    header p {
+      font-size: 1.2em;
+      margin: 1em 0 2em;
+    }
+    header button {
+      padding: 0.8em 1.5em;
+      font-size: 1.1em;
+      background-color: #0077ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    section {
+      max-width: 600px;
+      margin: 2em auto;
+      background: white;
+      padding: 2em;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .options button {
+      margin: 0.5em;
+      padding: 0.7em 1.2em;
+      background-color: #f0f0f0;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .options button:hover {
+      background-color: #d8ebff;
+    }
+    footer {
+      text-align: center;
+      padding: 2em;
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>הצעד הבא שלך</h1>
+    <p>גלה לאן הקריירה שלך צריכה ללכת בעזרת שאלון התאמה קצר ומדויק</p>
+    <button onclick="startQuiz()">התחל עכשיו</button>
+  </header>
+
+  <section id="quiz" style="display:none;">
+    <h2 id="question">מה מעניין אותך?</h2>
+    <div class="options" id="options"></div>
+  </section>
+
+  <section id="result" style="display:none;">
+    <h2>התוצאה שלך:</h2>
+    <p id="resultText"></p>
+    <a id="resultLink" href="#" target="_blank"><button>למידע נוסף</button></a>
+  </section>
+
+  <footer>
+    © 2025 הצעד הבא. כל הזכויות שמורות. | פותח באהבה
+  </footer>
+
+  <script>
+    const questions = [
+      { id: "interest", text: "מה מעניין אותך?", options: ["טכנולוגיה", "עיצוב", "חינוך", "עסקים"] },
+      { id: "style", text: "איך אתה אוהב לעבוד?", options: ["עצמאית", "בצוות", "עם מחשב", "עם אנשים"] }
+    ];
+    const answers = {};
+    let step = 0;
+
+    function startQuiz() {
+      document.querySelector("header").style.display = "none";
+      document.getElementById("quiz").style.display = "block";
+      showQuestion();
+    }
+
+    function showQuestion() {
+      document.getElementById("question").innerText = questions[step].text;
+      const container = document.getElementById("options");
+      container.innerHTML = "";
+      questions[step].options.forEach(opt => {
+        const btn = document.createElement("button");
+        btn.innerText = opt;
+        btn.onclick = () => {
+          answers[questions[step].id] = opt;
+          step++;
+          if (step < questions.length) {
+            showQuestion();
+          } else {
+            showResult();
+          }
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function showResult() {
+      document.getElementById("quiz").style.display = "none";
+      const res = document.getElementById("result");
+      const text = document.getElementById("resultText");
+      const link = document.getElementById("resultLink");
+      res.style.display = "block";
+
+      if (answers.interest === "טכנולוגיה") {
+        text.innerText = "תחומים כמו סייבר, פיתוח תוכנה או QA מתאימים לך מאוד.";
+        link.href = "https://www.johnbryce.co.il/catalog/cyber-security";
+      } else if (answers.interest === "עיצוב") {
+        text.innerText = "שקול לימודים ב-UX/UI או גרפיקה למובייל.";
+        link.href = "https://www.netcraft.co.il/";
+      } else {
+        text.innerText = "כדאי לבדוק תחומי ניהול, שיווק או טיפול באנשים.";
+        link.href = "https://campus.gov.il/";
+      }
+    }
+  </script>
+</body>
+</html>
